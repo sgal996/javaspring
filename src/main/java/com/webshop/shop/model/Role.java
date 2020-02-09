@@ -7,7 +7,13 @@ import java.util.List;
 @Table(name = "ROLES", schema = "PUBLIC")
 public class Role {
 
+    public Role() {
+    }
 
+    public Role(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
