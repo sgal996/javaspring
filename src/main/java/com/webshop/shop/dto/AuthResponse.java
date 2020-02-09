@@ -1,25 +1,13 @@
 package com.webshop.shop.dto;
 
+import java.util.List;
+
 public class AuthResponse {
 
+    public static final String TOKEN_TYPE = "Bearer ";
 
-    private String tokenType = "Bearer";
     private String accessToken;
-    private Long id;
-    private String name;
-
-    public AuthResponse(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    public String getTokenType() {
-        return tokenType;
-    }
-
-    public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
-    }
-
+    private List<String> roles;
 
     public String getAccessToken() {
         return accessToken;
@@ -29,19 +17,11 @@ public class AuthResponse {
         this.accessToken = accessToken;
     }
 
-    public Long getId() {
-        return id;
+    public List<String> getRoles() {
+        return roles;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 }
