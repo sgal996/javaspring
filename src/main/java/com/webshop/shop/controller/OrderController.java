@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +42,7 @@ public class OrderController {
     }
 
     @PostMapping("/saveorder")
-    public ResponseEntity<?> saveOrder(OrderDto orderDto) {
+    public ResponseEntity<?> saveOrder(@RequestBody OrderDto orderDto) {
 
         List<ProductDto> productDtos = orderDto.getProductDtos();//productDto-i koji su u orderDto-u
         Order order = new Order();//narudžba koja ce ici u bazu

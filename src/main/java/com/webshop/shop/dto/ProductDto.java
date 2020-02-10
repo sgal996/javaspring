@@ -4,6 +4,22 @@ import java.math.BigDecimal;
 
 public class ProductDto {
 
+    private Long id;
+
+    private Boolean newProduct;
+
+    private String name;
+
+    private String description;
+
+    private BigDecimal price;
+
+    private BigDecimal discount;
+
+    private String category;
+
+    private String img;
+
     public Long getId() {
         return id;
     }
@@ -12,17 +28,13 @@ public class ProductDto {
         this.id = id;
     }
 
-    private Long id;
+    public Boolean getNewProduct() {
+        return newProduct;
+    }
 
-    private String name;
-
-    private String description;
-
-    private BigDecimal price;
-
-
-
-    private String category;
+    public void setNewProduct(Boolean newProduct) {
+        this.newProduct = newProduct;
+    }
 
     public String getName() {
         return name;
@@ -48,11 +60,27 @@ public class ProductDto {
         this.price = price;
     }
 
+    public BigDecimal getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        this.discount = discount;
+    }
+
     public String getCategory() {
         return category;
     }
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 }

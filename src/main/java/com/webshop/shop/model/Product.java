@@ -2,6 +2,7 @@ package com.webshop.shop.model;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 
 @Entity
@@ -10,11 +11,14 @@ public class Product{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
-    
+    @Column(name = "CREATED_AT")
+    private Date createdAt;
     private String name;
     private String image;
     private BigDecimal price;
+    private BigDecimal discount;
     private String description;
+    private String category;
 
 
     public Long getId() {
@@ -23,6 +27,14 @@ public class Product{
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getName() {
@@ -49,11 +61,27 @@ public class Product{
         this.price = price;
     }
 
+    public BigDecimal getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        this.discount = discount;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }
