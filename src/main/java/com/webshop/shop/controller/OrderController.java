@@ -50,6 +50,13 @@ public class OrderController {
         List<Product> productList = new ArrayList<>();//producti koji ce ici u listu koja ide u order
         BigDecimal totalPrice = new BigDecimal(0);
         for (ProductDto productDto : productDtos) {
+
+            BigDecimal discountProduct = new BigDecimal(String.valueOf(productDto.getDiscount()));
+            discountProduct = discountProduct.divide(BigDecimal.valueOf(100));
+            BigDecimal discount = new BigDecimal(String.valueOf(productDto.getPrice()));// popust za proizvod
+            discount = discount.multiply(discountProduct);
+
+
             Product product = new Product();
             product.setName(productDto.getName());
             product.setPrice(productDto.getPrice());
@@ -57,11 +64,23 @@ public class OrderController {
             product.setName(productDto.getName());
             product.setImage(productDto.getCategory());
             productList.add(product);
-            totalPrice = totalPrice.add(productDto.getPrice());
+            totalPrice= totalPrice.add(productDto.getPrice());
+            totalPrice = totalPrice.subtract(discount);
 
+        }
+        if(orderDto.checkCoupon()){
+        String discountString = orderDto.getCoupon().substring(6);
+        BigDecimal discount = new BigDecimal(discountString);
+        discount = discount.divide(BigDecimal.valueOf(100));
+            if (orderDto.checkCoupon()) {
+            BigDecimal discountAmmount = new BigDecimal(String.valueOf(totalPrice.multiply(discount)));
+            totalPrice = totalPrice.subtract(discountAmmount);
+
+        }
         }
         order.setProducts(productList);
         order.setCreatedAt(new Date());
+
         order.setPrice(totalPrice);
         CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         order.setUserId(user.getId().toString());
