@@ -1,6 +1,7 @@
 package com.webshop.shop.model;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,10 @@ public class Order {
     private String userId;
     @Column(name = "CREATED_AT")
     private Date createdAt;
+    @Column(name = "PRICE")
+    private BigDecimal price;
+
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ORDER_PRODUCTS", joinColumns = {@JoinColumn(name = "ORDER_ID", referencedColumnName = "id")},
@@ -51,6 +56,14 @@ public class Order {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
 

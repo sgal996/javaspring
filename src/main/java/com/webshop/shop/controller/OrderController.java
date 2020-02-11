@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.xml.ws.Response;
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,6 +48,7 @@ public class OrderController {
         List<ProductDto> productDtos = orderDto.getProductDtos();//productDto-i koji su u orderDto-u
         Order order = new Order();//narudžba koja ce ici u bazu
         List<Product> productList = new ArrayList<>();//producti koji ce ici u listu koja ide u order
+        BigDecimal totalPrice = new BigDecimal(0);
         for (ProductDto productDto : productDtos) {
             Product product = new Product();
             product.setName(productDto.getName());
@@ -55,10 +57,12 @@ public class OrderController {
             product.setName(productDto.getName());
             product.setImage(productDto.getCategory());
             productList.add(product);
+            totalPrice = totalPrice.add(productDto.getPrice());
 
         }
         order.setProducts(productList);
         order.setCreatedAt(new Date());
+        order.setPrice(totalPrice);
         CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         order.setUserId(user.getId().toString());
 
