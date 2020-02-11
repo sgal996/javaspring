@@ -77,6 +77,7 @@ public class OrderController {
         order.setPrice(totalPrice);
         CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         order.setUserId(user.getId().toString());
+        order.setCoupon(orderDto.getCoupon());
 
         orderRepository.save(order);
 
@@ -88,6 +89,13 @@ public class OrderController {
 
         OrderDto.Coupon[] enums = OrderDto.Coupon.values();
         return enums;
+    }
+
+    @GetMapping("/getorders")
+    public List<Order> getOrders(){
+        List<Order> orders=orderRepository.findAll();
+        return orders;
+
     }
 }
 

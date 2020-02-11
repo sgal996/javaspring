@@ -123,6 +123,9 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="PRICE" type="DECIMAL">
                 <constraints nullable="false"/>
             </column>
+            <column name="COUPON" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
 
         </createTable>
         <rollback>
