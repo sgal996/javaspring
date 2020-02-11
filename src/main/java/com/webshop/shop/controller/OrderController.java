@@ -5,27 +5,18 @@ import com.webshop.shop.dto.OrderDto;
 import com.webshop.shop.dto.ProductDto;
 import com.webshop.shop.model.Order;
 import com.webshop.shop.model.Product;
-import com.webshop.shop.model.User;
 import com.webshop.shop.repository.OrderRepository;
 import com.webshop.shop.security.CustomUserDetails;
-import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.Response;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.webshop.shop.dto.OrderDto;
 
 @RestController
 @RequestMapping("/orders")
@@ -36,9 +27,11 @@ public class OrderController {
 
 
     private Authentication authentication;
+    private OrderDto orderDto;
 
     public OrderController(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
+
 
     }
 
@@ -64,19 +57,19 @@ public class OrderController {
             product.setName(productDto.getName());
             product.setImage(productDto.getCategory());
             productList.add(product);
-            totalPrice= totalPrice.add(productDto.getPrice());
+            totalPrice = totalPrice.add(productDto.getPrice());
             totalPrice = totalPrice.subtract(discount);
 
         }
-        if(orderDto.checkCoupon()){
-        String discountString = orderDto.getCoupon().substring(6);
-        BigDecimal discount = new BigDecimal(discountString);
-        discount = discount.divide(BigDecimal.valueOf(100));
+        if (orderDto.checkCoupon()) {
+            String discountString = orderDto.getCoupon().substring(6);
+            BigDecimal discount = new BigDecimal(discountString);
+            discount = discount.divide(BigDecimal.valueOf(100));
             if (orderDto.checkCoupon()) {
-            BigDecimal discountAmmount = new BigDecimal(String.valueOf(totalPrice.multiply(discount)));
-            totalPrice = totalPrice.subtract(discountAmmount);
+                BigDecimal discountAmmount = new BigDecimal(String.valueOf(totalPrice.multiply(discount)));
+                totalPrice = totalPrice.subtract(discountAmmount);
 
-        }
+            }
         }
         order.setProducts(productList);
         order.setCreatedAt(new Date());
@@ -88,6 +81,13 @@ public class OrderController {
         orderRepository.save(order);
 
         return ResponseEntity.ok("Narudžba uspješno izvršena!!");
+    }
+
+    @GetMapping("/getcoupons")
+    public OrderDto.Coupon[] getCoupons() {
+
+        OrderDto.Coupon[] enums = OrderDto.Coupon.values();
+        return enums;
     }
 }
 
