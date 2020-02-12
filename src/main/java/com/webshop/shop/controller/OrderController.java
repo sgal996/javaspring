@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.jws.soap.SOAPBinding;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -26,10 +27,12 @@ import java.util.Optional;
 public class OrderController {
 
     private OrderRepository orderRepository;
+    private UserRepository userRepository;
 
 
-    public OrderController(OrderRepository orderRepository) {
+    public OrderController(OrderRepository orderRepository, UserRepository userRepository) {
         this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/saveorder")
@@ -93,11 +96,11 @@ public class OrderController {
     public List<OrderDto> getOrders() {
         List<Order> orders;
         List<OrderDto> orderDtos = new ArrayList<>();
-        CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(user.getAuthorities().size() == 2) {
+        CustomUserDetails customuser = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(customuser.getAuthorities().size() == 2) {
             orders = orderRepository.findAll();
         }else{
-            orders = orderRepository.findByUserId(user.getId().toString());
+            orders = orderRepository.findByUserId(customuser.getId().toString());
         }
         for (Order order: orders) {
             OrderDto orderDto = new OrderDto();
@@ -105,7 +108,11 @@ public class OrderController {
             orderDto.setConfirmed(order.isConfirmed());
             orderDto.setCreatedAt(order.getCreatedAt());
             orderDto.setOrderId(order.getId());
-            orderDto.setUsername(user.getEmail());
+            orderDto.setCoupon(order.getCoupon());
+            String id=order.getUserId();
+            Optional<User> user = userRepository.findById(Long.valueOf(id));
+            User user2 = user.get();
+            orderDto.setUsername(user2.getEmail());
             for (Product product:order.getProducts()) {
                 List<ProductDto> productDtos = new ArrayList<>();
                 ProductDto productDto = new ProductDto();
