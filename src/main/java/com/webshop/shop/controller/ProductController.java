@@ -76,5 +76,13 @@ public class ProductController {
         return ResponseEntity.ok(productDto);
     }
 
+    @GetMapping("getbyid")
+    public List<Product> getProductByCat(String id) {
+
+        List<Product> productList = productRepository.findProductByCategory(id);
+        return productList;
+
+    }
+
 
 }

@@ -25,6 +25,9 @@ public class Order {
     private String coupon;
 
 
+    @Column(name="IS_CONFIRMED")
+    private boolean isConfirmed;
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ORDER_PRODUCTS", joinColumns = {@JoinColumn(name = "ORDER_ID", referencedColumnName = "id")},
@@ -77,6 +80,14 @@ public class Order {
 
     public void setCoupon(String coupon) {
         this.coupon = coupon;
+    }
+
+    public boolean isConfirmed() {
+        return isConfirmed;
+    }
+
+    public void setConfirmed(boolean confirmed) {
+        isConfirmed = confirmed;
     }
 
 

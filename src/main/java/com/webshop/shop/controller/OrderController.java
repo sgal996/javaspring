@@ -5,7 +5,9 @@ import com.webshop.shop.dto.OrderDto;
 import com.webshop.shop.dto.ProductDto;
 import com.webshop.shop.model.Order;
 import com.webshop.shop.model.Product;
+import com.webshop.shop.model.User;
 import com.webshop.shop.repository.OrderRepository;
+import com.webshop.shop.repository.UserRepository;
 import com.webshop.shop.security.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,20 +19,23 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
 
     private OrderRepository orderRepository;
+    private UserRepository userRepository;
     private Principal principal;
 
 
     private Authentication authentication;
     private OrderDto orderDto;
 
-    public OrderController(OrderRepository orderRepository) {
+    public OrderController(OrderRepository orderRepository, UserRepository userRepository) {
         this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
 
 
     }
@@ -78,6 +83,7 @@ public class OrderController {
         CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         order.setUserId(user.getId().toString());
         order.setCoupon(orderDto.getCoupon());
+        order.setConfirmed(false);
 
         orderRepository.save(order);
 
@@ -92,9 +98,30 @@ public class OrderController {
     }
 
     @GetMapping("/getorders")
-    public List<Order> getOrders(){
-        List<Order> orders=orderRepository.findAll();
+    public List<Order> getOrders() {
+        List<Order> orders = orderRepository.findAll();
         return orders;
+
+    }
+
+    @GetMapping("/getusersorders")
+    public List<Order> getUserOrders(String email) {
+        User user = userRepository.findFirstByEmail(email);
+
+
+        List<Order> orders = orderRepository.findByUserId(user.getId().toString());
+
+        return orders;
+    }
+
+    @PostMapping("/confirmorder")
+    public ResponseEntity<?> confirmOrder(Long id){
+        Order order = orderRepository.findFirstById(id);
+
+        order.setConfirmed(true);
+        orderRepository.save(order);
+
+        return ResponseEntity.ok("Narudžba potvrđena!");
 
     }
 }

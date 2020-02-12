@@ -126,6 +126,9 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="COUPON" type="VARCHAR(255)">
                 <constraints nullable="true"/>
             </column>
+            <column name="IS_CONFIRMED" type="VARCHAR(255)">
+                <constraints  nullable="true"/>
+            </column>
 
         </createTable>
         <rollback>
