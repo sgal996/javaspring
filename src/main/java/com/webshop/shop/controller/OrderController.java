@@ -90,15 +90,40 @@ public class OrderController {
     }
 
     @GetMapping("/getorders")
-    public List<Order> getOrders() {
+    public List<OrderDto> getOrders() {
         List<Order> orders;
+        List<OrderDto> orderDtos = new ArrayList<>();
         CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(user.getAuthorities().size() == 2) {
             orders = orderRepository.findAll();
         }else{
             orders = orderRepository.findByUserId(user.getId().toString());
         }
-        return orders;
+        for (Order order: orders) {
+            OrderDto orderDto = new OrderDto();
+            orderDto.setPrice(order.getPrice());
+            orderDto.setConfirmed(order.isConfirmed());
+            orderDto.setCreatedAt(order.getCreatedAt());
+            orderDto.setOrderId(order.getId());
+            orderDto.setUsername(user.getEmail());
+            for (Product product:order.getProducts()) {
+                List<ProductDto> productDtos = new ArrayList<>();
+                ProductDto productDto = new ProductDto();
+                productDto.setName(product.getName());
+                productDto.setDescription(product.getDescription());
+                productDto.setPrice(product.getPrice());
+                productDto.setDiscount(product.getDiscount());
+                productDto.setImg(product.getImage());
+                productDtos.add(productDto);
+
+                orderDto.setProductDtos(productDtos);
+
+            }
+            orderDtos.add(orderDto);
+
+        }
+
+        return orderDtos;
 
     }
 

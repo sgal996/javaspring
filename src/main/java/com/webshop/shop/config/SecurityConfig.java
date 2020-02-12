@@ -85,7 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())//samo se bavimo
                 .and()
                 .authorizeRequests()
-                .antMatchers("/auth/**","/orders/**").permitAll()
+                .antMatchers("/auth/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
