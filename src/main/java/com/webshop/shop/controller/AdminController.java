@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -34,20 +36,23 @@ public class AdminController {
 
     }
 
-    @PostMapping("/product/add")
+    @PostMapping("/add")
     public ResponseEntity<?> addProduct(@RequestBody ProductDto productDto) {
-
         Product product = new Product();
         product.setName(productDto.getName());
-        product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
-        product.setImage(productDto.getCategory().toLowerCase());
+        product.setDiscount(productDto.getDiscount());
+        product.setDescription(productDto.getDescription());
+        product.setImage(productDto.getImg());
+        product.setCategory(productDto.getCategory());
+        product.setCreatedAt(new Date());
 
-        Product save = productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
 
-        return ResponseEntity.ok("Uspješno dodano!! " + save.getId());
+        productDto.setId(savedProduct.getId());
+        productDto.setNewProduct(Boolean.TRUE);
 
-
+        return ResponseEntity.ok(productDto);
     }
 
 }

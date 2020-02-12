@@ -57,31 +57,12 @@ public class ProductController {
         return d <= 3L;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addProduct(@RequestBody ProductDto productDto) {
-        Product product = new Product();
-        product.setName(productDto.getName());
-        product.setPrice(productDto.getPrice());
-        product.setDiscount(productDto.getDiscount());
-        product.setDescription(productDto.getDescription());
-        product.setImage(productDto.getImg());
-        product.setCategory(productDto.getCategory());
-        product.setCreatedAt(new Date());
-
-        Product savedProduct = productRepository.save(product);
-
-        productDto.setId(savedProduct.getId());
-        productDto.setNewProduct(Boolean.TRUE);
-
-        return ResponseEntity.ok(productDto);
-    }
 
     @GetMapping("getbyid")
     public List<Product> getProductByCat(String id) {
 
         List<Product> productList = productRepository.findProductByCategory(id);
         return productList;
-
     }
 
 

@@ -14,3 +14,4 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
 
 }
+// add product u admin, u get orders ordere 2u1

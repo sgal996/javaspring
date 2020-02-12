@@ -26,18 +26,10 @@ import java.util.Optional;
 public class OrderController {
 
     private OrderRepository orderRepository;
-    private UserRepository userRepository;
-    private Principal principal;
 
 
-    private Authentication authentication;
-    private OrderDto orderDto;
-
-    public OrderController(OrderRepository orderRepository, UserRepository userRepository) {
+    public OrderController(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
-        this.userRepository = userRepository;
-
-
     }
 
     @PostMapping("/saveorder")
@@ -99,30 +91,25 @@ public class OrderController {
 
     @GetMapping("/getorders")
     public List<Order> getOrders() {
-        List<Order> orders = orderRepository.findAll();
+        List<Order> orders;
+        CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(user.getAuthorities().size() == 2) {
+            orders = orderRepository.findAll();
+        }else{
+            orders = orderRepository.findByUserId(user.getId().toString());
+        }
         return orders;
 
-    }
-
-    @GetMapping("/getusersorders")
-    public List<Order> getUserOrders(String email) {
-        User user = userRepository.findFirstByEmail(email);
-
-
-        List<Order> orders = orderRepository.findByUserId(user.getId().toString());
-
-        return orders;
     }
 
     @PostMapping("/confirmorder")
     public ResponseEntity<?> confirmOrder(Long id){
-        Order order = orderRepository.findFirstById(id);
-
+        Optional<Order> optionalOrder = orderRepository.findById(id);
+        Order order = optionalOrder.get();
         order.setConfirmed(true);
         orderRepository.save(order);
 
         return ResponseEntity.ok("Narudžba potvrđena!");
-
     }
 }
 
