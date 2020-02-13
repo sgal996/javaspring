@@ -62,7 +62,7 @@ public class AuthController {
                 user.getRoles().add(new Role(1L, "ADMIN"));
             } else
                 {
-                if (isRoleExists("USER", user.getRoles())) {//mogu makniti
+                if (isRoleExists("USER", user.getRoles())) {
                     throw new RuntimeException("Email se koristi!!");
                 }
                 user.getRoles().add(new Role(2L, "USER"));
@@ -107,7 +107,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authenticate);
 
         String token = tokenProvider.create(authenticate);
-        CustomUserDetails principal = (CustomUserDetails) authenticate.getPrincipal();//
+        CustomUserDetails principal = (CustomUserDetails) authenticate.getPrincipal();
 
         AuthResponse authResponse = new AuthResponse();
         authResponse.setAccessToken(AuthResponse.TOKEN_TYPE + token);

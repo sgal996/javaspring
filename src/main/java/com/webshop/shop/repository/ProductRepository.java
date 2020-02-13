@@ -11,7 +11,4 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     List<Product> findProductByCategory(String category);
 
-
-
 }
-// add product u admin, u get orders ordere 2u1

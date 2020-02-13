@@ -26,8 +26,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new RuntimeException("User " + email + " not found!!");
 
         return CustomUserDetails.create(optionalUser.get());
-
-
     }
 
     public UserDetails loadUserById(Long userId) {

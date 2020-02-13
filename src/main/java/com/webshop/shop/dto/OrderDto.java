@@ -11,10 +11,7 @@ public class OrderDto {
 
     }
     private BigDecimal price;
-
     private boolean isConfirmed;
-
-
     private List<ProductDto> productDtos;
     private Long orderId;
     private Date createdAt;
@@ -75,11 +72,8 @@ public class OrderDto {
                 return true;
             }
         }
-
         return false;
-
     }
-
 
     public String getCoupon() {
         return coupon;

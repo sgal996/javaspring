@@ -18,16 +18,10 @@ public class Order {
     private Date createdAt;
     @Column(name = "PRICE")
     private BigDecimal price;
-
-
-
     @Column(name="COUPON")
     private String coupon;
-
-
     @Column(name="IS_CONFIRMED")
     private boolean isConfirmed;
-
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ORDER_PRODUCTS", joinColumns = {@JoinColumn(name = "ORDER_ID", referencedColumnName = "id")},
@@ -89,6 +83,5 @@ public class Order {
     public void setConfirmed(boolean confirmed) {
         isConfirmed = confirmed;
     }
-
 
 }

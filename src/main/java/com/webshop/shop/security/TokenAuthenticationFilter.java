@@ -29,7 +29,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//stavlja usera u security context
+
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
         catch (Exception ex){}

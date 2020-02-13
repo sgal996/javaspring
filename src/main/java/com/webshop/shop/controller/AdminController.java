@@ -33,7 +33,6 @@ public class AdminController {
         CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
         return userRepository.findByEmail(principal.getEmail()).orElseThrow(() -> new RuntimeException("Error!!!"));
 
-
     }
 
     @PostMapping("/add")

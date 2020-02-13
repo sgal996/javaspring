@@ -59,10 +59,23 @@ public class ProductController {
 
 
     @GetMapping("getbyid")
-    public List<Product> getProductByCat(String id) {
+    public List<ProductDto> getProductByCat(String id) {
 
         List<Product> productList = productRepository.findProductByCategory(id);
-        return productList;
+        List<ProductDto> productDtos = new ArrayList<>();
+        for (Product product : productList) {
+            ProductDto productDto = new ProductDto();
+            productDto.setId(product.getId());
+            productDto.setName(product.getName());
+            productDto.setDescription(product.getDescription());
+            productDto.setPrice(product.getPrice());
+            productDto.setCategory(product.getCategory());
+            productDto.setNewProduct(isNewProduct(product.getCreatedAt()));
+            productDto.setImg(product.getImage());
+            productDto.setDiscount(product.getDiscount());
+            productDtos.add(productDto);
+        }
+        return productDtos;
     }
 
 

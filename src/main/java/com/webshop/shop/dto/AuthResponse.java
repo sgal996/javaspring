@@ -5,7 +5,6 @@ import java.util.List;
 public class AuthResponse {
 
     public static final String TOKEN_TYPE = "Bearer ";
-
     private String accessToken;
     private List<String> roles;
 

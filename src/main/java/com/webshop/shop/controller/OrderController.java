@@ -97,24 +97,28 @@ public class OrderController {
         List<Order> orders;
         List<OrderDto> orderDtos = new ArrayList<>();
         CustomUserDetails customuser = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(customuser.getAuthorities().size() == 2) {
+
+        if (customuser.getAuthorities().size() == 2) {
             orders = orderRepository.findAll();
-        }else{
+        } else {
             orders = orderRepository.findByUserId(customuser.getId().toString());
         }
-        for (Order order: orders) {
+
+        for (Order order : orders)
+        {
             OrderDto orderDto = new OrderDto();
             orderDto.setPrice(order.getPrice());
             orderDto.setConfirmed(order.isConfirmed());
             orderDto.setCreatedAt(order.getCreatedAt());
             orderDto.setOrderId(order.getId());
             orderDto.setCoupon(order.getCoupon());
-            String id=order.getUserId();
+            String id = order.getUserId();
             Optional<User> user = userRepository.findById(Long.valueOf(id));
             User user2 = user.get();
             orderDto.setUsername(user2.getEmail());
-            for (Product product:order.getProducts()) {
-                List<ProductDto> productDtos = new ArrayList<>();
+            List<ProductDto> productDtos = new ArrayList<>();
+            for (Product product : order.getProducts()) {
+
                 ProductDto productDto = new ProductDto();
                 productDto.setName(product.getName());
                 productDto.setDescription(product.getDescription());
@@ -123,19 +127,20 @@ public class OrderController {
                 productDto.setImg(product.getImage());
                 productDtos.add(productDto);
 
-                orderDto.setProductDtos(productDtos);
-
             }
+
+            orderDto.setProductDtos(productDtos);
             orderDtos.add(orderDto);
 
         }
+
 
         return orderDtos;
 
     }
 
     @PostMapping("/confirmorder")
-    public ResponseEntity<?> confirmOrder(Long id){
+    public ResponseEntity<?> confirmOrder(Long id) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         Order order = optionalOrder.get();
         order.setConfirmed(true);
