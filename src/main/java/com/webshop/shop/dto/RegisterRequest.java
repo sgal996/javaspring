@@ -17,6 +17,16 @@ public class RegisterRequest  {
 
     private Boolean administrator;
 
+    private String adress;
+
+    public String getAdress() {
+        return adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
+    }
+
     public String getName() {
         return name;
     }

@@ -150,5 +150,18 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
         </rollback>
     </changeSet>
 
+    <changeSet author="sime" id="7452823943">
+        <addColumn
+                   schemaName= "PUBLIC"
+                   tableName="USERS" >
+            <column name="adress"
+                    position="2"
+                    type="varchar(255)">
+
+
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
 

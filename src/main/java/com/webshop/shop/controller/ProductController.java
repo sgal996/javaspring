@@ -1,21 +1,19 @@
 package com.webshop.shop.controller;
 
+import com.webshop.shop.dto.GetByIdDto;
 import com.webshop.shop.dto.ProductDto;
 import com.webshop.shop.model.Product;
 import com.webshop.shop.repository.ProductRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-//category je image
+
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -27,7 +25,7 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
-    @PostMapping("/all")
+    @GetMapping("/all")
     public List<ProductDto> getAllProducts() {
 
         List<ProductDto> productDtos = new ArrayList<>();
@@ -58,11 +56,13 @@ public class ProductController {
     }
 
 
-    @GetMapping("getbyid")
-    public List<ProductDto> getProductByCat(String id) {
+    @GetMapping("/getbyid")
+    public List<ProductDto> getProductByCat(@RequestParam String id) {
 
-        List<Product> productList = productRepository.findProductByCategory(id);
+        List<Product> productList = productRepository.findAllByCategory(id  );//productRepository.findAllByCategory(id);
+        //List<Product> productList= (List<Product>) products.get();
         List<ProductDto> productDtos = new ArrayList<>();
+
         for (Product product : productList) {
             ProductDto productDto = new ProductDto();
             productDto.setId(product.getId());

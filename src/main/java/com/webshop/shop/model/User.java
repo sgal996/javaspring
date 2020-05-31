@@ -28,6 +28,16 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private List<Role> roles;
 
+    @Column
+    private String adress;
+
+    public String getAdress() {
+        return adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
+    }
 
     public Long getId() {
         return id;

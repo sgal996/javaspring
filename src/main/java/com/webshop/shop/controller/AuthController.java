@@ -76,6 +76,7 @@ public class AuthController {
         user.setEmail(registerRequest.getEmail());
         user.setName(registerRequest.getName());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setAdress(registerRequest.getAdress());
 
         List<Role> roles = new ArrayList<>();
         roles.add(new Role(2L, "USER"));
