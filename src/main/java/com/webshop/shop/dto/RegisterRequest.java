@@ -2,6 +2,7 @@ package com.webshop.shop.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.math.BigInteger;
 
 public class RegisterRequest  {
 
@@ -18,6 +19,26 @@ public class RegisterRequest  {
     private Boolean administrator;
 
     private String adress;
+
+    private String city;
+
+    private BigInteger postalCode;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public BigInteger getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(BigInteger postalCode) {
+        this.postalCode = postalCode;
+    }
 
     public String getAdress() {
         return adress;

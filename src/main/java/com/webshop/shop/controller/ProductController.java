@@ -40,6 +40,7 @@ public class ProductController {
             productDto.setNewProduct(isNewProduct(product.getCreatedAt()));
             productDto.setImg(product.getImage());
             productDto.setDiscount(product.getDiscount());
+            productDto.setSize(product.getSize());
             productDtos.add(productDto);
         }
 

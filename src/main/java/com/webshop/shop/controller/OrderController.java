@@ -1,6 +1,7 @@
 package com.webshop.shop.controller;
 
 
+import com.webshop.shop.dto.ConfirmOrderDto;
 import com.webshop.shop.dto.OrderDto;
 import com.webshop.shop.dto.ProductDto;
 import com.webshop.shop.model.Order;
@@ -9,6 +10,7 @@ import com.webshop.shop.model.User;
 import com.webshop.shop.repository.OrderRepository;
 import com.webshop.shop.repository.UserRepository;
 import com.webshop.shop.security.CustomUserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import com.webshop.shop.services.EmailSender;
 
 @RestController
 @RequestMapping("/orders")
@@ -28,15 +31,20 @@ public class OrderController {
 
     private OrderRepository orderRepository;
     private UserRepository userRepository;
+    private EmailSender emailSender;
 
 
-    public OrderController(OrderRepository orderRepository, UserRepository userRepository) {
+
+    public OrderController(OrderRepository orderRepository, UserRepository userRepository, EmailSender emailSender) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
+        this.emailSender = emailSender;
+
     }
 
     @PostMapping("/saveorder")
     public ResponseEntity<?> saveOrder(@RequestBody OrderDto orderDto) {
+
 
         List<ProductDto> productDtos = orderDto.getProductDtos();//productDto-i koji su u orderDto-u
         Order order = new Order();//narudžba koja ce ici u bazu
@@ -52,13 +60,14 @@ public class OrderController {
 
             Product product = new Product();
             product.setName(productDto.getName());
-            product.setPrice(productDto.getPrice());
+            product.setPrice(productDto.getPrice().multiply(productDto.getQuantity()));
             product.setId(productDto.getId());
             product.setName(productDto.getName());
             product.setImage(productDto.getCategory());
+            product.setSize(productDto.getSize());
             productList.add(product);
-            totalPrice = totalPrice.add(productDto.getPrice());
-            totalPrice = totalPrice.subtract(discount);
+            totalPrice = totalPrice.add(productDto.getPrice().multiply(productDto.getQuantity()));
+            totalPrice = totalPrice.subtract(discount.multiply(productDto.getQuantity()));
 
         }
         if (orderDto.checkCoupon()) {
@@ -81,6 +90,9 @@ public class OrderController {
         order.setConfirmed(false);
 
         orderRepository.save(order);
+        emailSender.sendMail(user.getEmail());
+
+
 
         return ResponseEntity.ok("Narudžba uspješno izvršena!!");
     }
@@ -140,11 +152,17 @@ public class OrderController {
     }
 
     @PostMapping("/confirmorder")
-    public ResponseEntity<?> confirmOrder(Long id) {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
+    public ResponseEntity<?> confirmOrder(@RequestBody ConfirmOrderDto confirmOrderDto) {
+        Optional<Order> optionalOrder = orderRepository.findById(confirmOrderDto.getId());
         Order order = optionalOrder.get();
         order.setConfirmed(true);
+        String userId = order.getUserId();
+        Long userID = Long.valueOf(userId);
+        Optional<User> optionalUser = userRepository.findById(userID);
+        User user = optionalUser.get();
+
         orderRepository.save(order);
+        emailSender.sendConfirmationMail(user.getEmail(),order.getProducts());
 
         return ResponseEntity.ok("Narudžba potvrđena!");
     }

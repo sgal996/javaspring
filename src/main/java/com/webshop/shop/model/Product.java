@@ -19,7 +19,24 @@ public class Product{
     private BigDecimal discount;
     private String description;
     private String category;
+    private String subCategory;
+    private String size;
 
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
+    }
 
     public Long getId() {
         return id;

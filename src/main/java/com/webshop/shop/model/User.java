@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.math.BigInteger;
 import java.util.List;
 
 @Entity
@@ -30,6 +31,30 @@ public class User {
 
     @Column
     private String adress;
+
+    @Column
+    private String city;
+
+    @Column
+    private BigInteger postalCode;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public BigInteger getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(BigInteger postalCode) {
+        this.postalCode = postalCode;
+    }
+
+
 
     public String getAdress() {
         return adress;

@@ -45,6 +45,8 @@ public class AdminController {
         product.setImage(productDto.getImg());
         product.setCategory(productDto.getCategory());
         product.setCreatedAt(new Date());
+        product.setSubCategory(productDto.getSubCategory());
+        product.setSize(productDto.getSize());
 
         Product savedProduct = productRepository.save(product);
 

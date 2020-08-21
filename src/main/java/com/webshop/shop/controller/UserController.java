@@ -41,6 +41,8 @@ public class UserController {
         userInfo.setName(user.getName());
         userInfo.setAdress(user.getAdress());
         userInfo.setMail(user.getEmail());
+        userInfo.setCity(user.getCity());
+        userInfo.setPostalCode(user.getPostalCode());
 
         return ResponseEntity.ok(userInfo);
     }
@@ -53,6 +55,8 @@ public class UserController {
         UserInfoDto userNewData = new UserInfoDto();
         user.setAdress(userInfoDto.getAdress());
         user.setName(userInfoDto.getName());
+        user.setCity(userInfoDto.getCity());
+        user.setPostalCode(userInfoDto.getPostalCode());
         userRepository.save(user);
         return ResponseEntity.ok(userInfoDto);
 

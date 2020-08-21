@@ -163,5 +163,85 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
         </addColumn>
     </changeSet>
 
+    <changeSet author="sime" id="745308239431">
+        <addColumn
+                schemaName= "PUBLIC"
+                tableName="USERS" >
+            <column name="city"
+                    position="2"
+                    type="varchar(255)">
+
+
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="sime" id="74528239432">
+        <addColumn
+                schemaName= "PUBLIC"
+                tableName="USERS" >
+            <column name="postalcode"
+                    position="2"
+                    type="INT">
+
+
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet  author="sime"  id="renameColumn0814">
+        <renameColumn  catalogName="cat"
+                       columnDataType="int"
+                       newColumnName="POSTALCODE"
+                       oldColumnName="postalcode"
+                       remarks="A String"
+                       schemaName="public"
+                       tableName="USERS"/>
+    </changeSet>
+    <changeSet  author="sime"  id="renameColumn08142">
+        <renameColumn  catalogName="cat"
+                       columnDataType="int"
+                       newColumnName="POSTAL_CODE"
+                       oldColumnName="POSTALCODE"
+                       remarks="A String"
+                       schemaName="public"
+                       tableName="USERS"/>
+    </changeSet>
+
+    <changeSet author="sime" id="addsubcat">
+        <addColumn
+                schemaName= "PUBLIC"
+                tableName="PRODUCTS" >
+            <column name="subcategory"
+                    position="2"
+                    type="VARCHAR(255)">
+
+
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet  author="sime"  id="renameColumn08142again">
+        <renameColumn  catalogName="cat"
+                       columnDataType="int"
+                       newColumnName="SUB_CATEGORY"
+                       oldColumnName="subcategory"
+                       remarks="A String"
+                       schemaName="public"
+                       tableName="PRODUCTS"/>
+    </changeSet>
+
+    <changeSet author="sime" id="addsize">
+        <addColumn
+                schemaName= "PUBLIC"
+                tableName="PRODUCTS" >
+            <column name="SIZE"
+                    position="2"
+                    type="VARCHAR(255)">
+
+
+            </column>
+        </addColumn>
+    </changeSet>
+
+
 </databaseChangeLog>
 
