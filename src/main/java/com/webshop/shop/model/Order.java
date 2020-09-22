@@ -23,6 +23,26 @@ public class Order {
     @Column(name="IS_CONFIRMED")
     private boolean isConfirmed;
 
+    private boolean isDelivered;
+
+    private boolean isCancelled;
+
+    public boolean isCancelled() {
+        return isCancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        isCancelled = cancelled;
+    }
+
+    public boolean isDelivered() {
+        return isDelivered;
+    }
+
+    public void setDelivered(boolean delivered) {
+        isDelivered = delivered;
+    }
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ORDER_PRODUCTS", joinColumns = {@JoinColumn(name = "ORDER_ID", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "PRODUCT_ID", referencedColumnName = "id")})

@@ -2,8 +2,11 @@ package com.webshop.shop.controller;
 
 import com.webshop.shop.dto.GetByIdDto;
 import com.webshop.shop.dto.ProductDto;
+import com.webshop.shop.dto.SubcategoryDto;
 import com.webshop.shop.model.Product;
+import com.webshop.shop.model.Subcategory;
 import com.webshop.shop.repository.ProductRepository;
+import com.webshop.shop.repository.SubcategoryRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +22,12 @@ import java.util.concurrent.TimeUnit;
 public class ProductController {
 
     private ProductRepository productRepository;
+    private SubcategoryRepository subcategoryRepository;
 
-    public ProductController(ProductRepository productRepository) {
+    public ProductController(ProductRepository productRepository, SubcategoryRepository subcategoryRepository) {
 
         this.productRepository = productRepository;
+        this.subcategoryRepository = subcategoryRepository;
     }
 
     @GetMapping("/all")
@@ -41,6 +46,9 @@ public class ProductController {
             productDto.setImg(product.getImage());
             productDto.setDiscount(product.getDiscount());
             productDto.setSize(product.getSize());
+            productDto.setSubCategory(product.getSubCategory());
+            productDto.setCreatedAt(product.getCreatedAt());
+            productDto.setHidden(product.getHidden());
             productDtos.add(productDto);
         }
 
@@ -56,7 +64,7 @@ public class ProductController {
         return d <= 3L;
     }
 
-
+//not used
     @GetMapping("/getbyid")
     public List<ProductDto> getProductByCat(@RequestParam String id) {
 
@@ -79,5 +87,45 @@ public class ProductController {
         return productDtos;
     }
 
+    @PostMapping("/deleteproduct")
+    public ResponseEntity<?> delete(@RequestBody ProductDto productDto){
+        Optional.of(new Product());
+        Optional<Product> optionalProduct;
+        optionalProduct = productRepository.findById(productDto.getId());
+        Product product = optionalProduct.get();
+        product.setHidden(!product.getHidden());
+        productRepository.save(product);
+        productDto.setHidden(Boolean.TRUE);
+
+
+        return ResponseEntity.ok("Proizvod uspješno izbrisan");
+    }
+
+    @GetMapping("/getsubcategories")
+    public ResponseEntity<?> getSubcategories(){
+        List<Subcategory> subcategories;
+        subcategories = subcategoryRepository.findAll();
+
+        return ResponseEntity.ok(subcategories);
+    }
+
+    @PostMapping("/addsubcategory")
+    public ResponseEntity<?> addSubcategory(@RequestBody SubcategoryDto subcategoryDto){
+        Subcategory subcategory = new Subcategory();
+        subcategory.setName(subcategoryDto.getName());
+        subcategoryRepository.save(subcategory);
+
+        return ResponseEntity.ok(subcategory);
+    }
+
+    @PostMapping("/deletesubcategory")
+    public ResponseEntity<?> deleteSubcategory(@RequestBody SubcategoryDto subcategoryDto){
+
+        List <Subcategory> subcategories = subcategoryRepository.findSubcategoryByName(subcategoryDto.getName());
+        subcategoryRepository.deleteById(subcategories.get(0).getId());
+
+        return ResponseEntity.ok("Podkategorija je izbrisana!");
+
+    }
 
 }

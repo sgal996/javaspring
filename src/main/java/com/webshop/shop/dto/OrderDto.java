@@ -1,6 +1,7 @@
 package com.webshop.shop.dto;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,60 @@ public class OrderDto {
     private Date createdAt;
     private String username;
     private String coupon;
+    private Boolean isDelivered;
+    private boolean isCancelled;
+    private String adress;
+    private String city;
+    private BigInteger postalCode;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public BigInteger getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(BigInteger postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getAdress() {
+        return adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
+    }
+
+    public boolean isCancelled() {
+        return isCancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        isCancelled = cancelled;
+    }
+
+    public Boolean getDelivered() {
+        return isDelivered;
+    }
+
+    public void setDelivered(Boolean delivered) {
+        isDelivered = delivered;
+    }
 
     public boolean isConfirmed() {
         return isConfirmed;

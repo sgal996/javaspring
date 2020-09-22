@@ -1,6 +1,7 @@
 package com.webshop.shop.dto;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 
 public class ProductDto {
@@ -26,6 +27,26 @@ public class ProductDto {
     private String subCategory;
 
     private String size;
+
+    private Boolean hidden;
+
+    private Date createdAt;
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Boolean getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Boolean hidden) {
+        this.hidden = hidden;
+    }
 
     public String getSize() {
         return size;

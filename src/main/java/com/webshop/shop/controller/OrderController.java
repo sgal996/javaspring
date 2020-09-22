@@ -65,7 +65,9 @@ public class OrderController {
             product.setName(productDto.getName());
             product.setImage(productDto.getCategory());
             product.setSize(productDto.getSize());
-            productList.add(product);
+            for (int i = 0; i<productDto.getQuantity().intValue();i++) {
+                productList.add(product);
+            }
             totalPrice = totalPrice.add(productDto.getPrice().multiply(productDto.getQuantity()));
             totalPrice = totalPrice.subtract(discount.multiply(productDto.getQuantity()));
 
@@ -88,6 +90,8 @@ public class OrderController {
         order.setUserId(user.getId().toString());
         order.setCoupon(orderDto.getCoupon());
         order.setConfirmed(false);
+        order.setDelivered(Boolean.FALSE);
+        order.setCancelled(false);
 
         orderRepository.save(order);
         emailSender.sendMail(user.getEmail());
@@ -106,6 +110,7 @@ public class OrderController {
 
     @GetMapping("/getorders")
     public List<OrderDto> getOrders() {
+
         List<Order> orders;
         List<OrderDto> orderDtos = new ArrayList<>();
         CustomUserDetails customuser = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -116,20 +121,32 @@ public class OrderController {
             orders = orderRepository.findByUserId(customuser.getId().toString());
         }
 
+
+
         for (Order order : orders)
         {
+
             OrderDto orderDto = new OrderDto();
             orderDto.setPrice(order.getPrice());
             orderDto.setConfirmed(order.isConfirmed());
             orderDto.setCreatedAt(order.getCreatedAt());
             orderDto.setOrderId(order.getId());
             orderDto.setCoupon(order.getCoupon());
+            orderDto.setDelivered(order.isDelivered());
+            orderDto.setCancelled(order.isCancelled());
+            //orderDto.setAdress(useradr.getAdress());
             String id = order.getUserId();
             Optional<User> user = userRepository.findById(Long.valueOf(id));
             User user2 = user.get();
             orderDto.setUsername(user2.getEmail());
+            orderDto.setAdress(user2.getAdress());
+            orderDto.setCity(user2.getCity());
+            orderDto.setPostalCode(user2.getPostalCode());
+            orderDto.setName(user2.getName());
             List<ProductDto> productDtos = new ArrayList<>();
             for (Product product : order.getProducts()) {
+
+
 
                 ProductDto productDto = new ProductDto();
                 productDto.setName(product.getName());
@@ -137,6 +154,18 @@ public class OrderController {
                 productDto.setPrice(product.getPrice());
                 productDto.setDiscount(product.getDiscount());
                 productDto.setImg(product.getImage());
+
+                for(ProductDto productDto1: productDtos){
+                    productDto.setQuantity(new BigDecimal(1));
+                    if(productDto1.getName() == productDto.getName()){
+
+                        break;
+                    }
+
+                }
+
+
+
                 productDtos.add(productDto);
 
             }
@@ -166,7 +195,34 @@ public class OrderController {
 
         return ResponseEntity.ok("Narudžba potvrđena!");
     }
+
+    @PutMapping("/delivered")
+    public ResponseEntity<?> orderDelivered(@RequestBody OrderDto orderDto){
+
+        Optional<Order> order = orderRepository.findById(orderDto.getOrderId());
+        Order order1 = order.get();
+        order1.setDelivered(Boolean.TRUE);
+        orderRepository.save(order1);
+
+        return ResponseEntity.ok("Narudžba je dostavljena");
+    }
+
+    @PutMapping("/cancel")
+    public ResponseEntity<?> orderCancel(@RequestBody OrderDto orderDto){
+        Optional<Order> order = orderRepository.findById(orderDto.getOrderId());
+        Order order1 = order.get();
+        order1.setCancelled(true);
+
+        orderRepository.save(order1);
+
+
+        return ResponseEntity.ok("Narudžba je stornirana");
+    }
 }
+
+
+
+
 
 
 

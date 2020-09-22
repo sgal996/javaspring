@@ -38,6 +38,16 @@ public class User {
     @Column
     private BigInteger postalCode;
 
+    private Boolean active;
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     public String getCity() {
         return city;
     }

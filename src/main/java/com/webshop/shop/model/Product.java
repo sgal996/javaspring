@@ -21,6 +21,16 @@ public class Product{
     private String category;
     private String subCategory;
     private String size;
+    private Boolean hidden;
+
+
+    public Boolean getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Boolean hidden) {
+        this.hidden = hidden;
+    }
 
     public String getSize() {
         return size;

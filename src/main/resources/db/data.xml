@@ -242,6 +242,71 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
         </addColumn>
     </changeSet>
 
+    <changeSet author="sime" id="addhidden">
+        <addColumn
+                schemaName= "PUBLIC"
+                tableName="PRODUCTS" >
+            <column name="HIDDEN"
+                    position="2"
+                    type="boolean">
+
+
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="addsubcategories" author="sime">
+        <createTable tableName="SUBCATEGORIES">
+            <column autoIncrement="true" name="ID" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="SUBCATEGORIES"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="sime" id="addactive">
+        <addColumn
+                schemaName= "PUBLIC"
+                tableName="USERS" >
+            <column name="ACTIVE"
+                    position="2"
+                    type="boolean">
+
+
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="sime" id="isdelivered">
+        <addColumn
+                schemaName= "PUBLIC"
+                tableName="ORDERS" >
+            <column name="IS_DELIVERED"
+                    position="2"
+                    type="boolean">
+
+
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="sime" id="iscancelled">
+        <addColumn
+                schemaName= "PUBLIC"
+                tableName="ORDERS" >
+            <column name="IS_CANCELLED"
+                    position="2"
+                    type="boolean">
+
+
+            </column>
+        </addColumn>
+    </changeSet>
+
 
 </databaseChangeLog>
 

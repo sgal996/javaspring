@@ -15,14 +15,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,6 +75,7 @@ public class AuthController {
         user.setAdress(registerRequest.getAdress());
         user.setCity(registerRequest.getCity());
         user.setPostalCode(registerRequest.getPostalCode());
+        user.setActive(Boolean.TRUE);
 
         List<Role> roles = new ArrayList<>();
         roles.add(new Role(2L, "USER"));
@@ -104,13 +101,19 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequest loginRequest){
+    public Object loginUser(@Valid @RequestBody LoginRequest loginRequest){
 
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
 
         String token = tokenProvider.create(authenticate);
         CustomUserDetails principal = (CustomUserDetails) authenticate.getPrincipal();
+
+        User user = userRepository.getOne(principal.getId());
+
+        if(!user.getActive()){
+            return  ResponseEntity.badRequest();
+        }
 
         AuthResponse authResponse = new AuthResponse();
         authResponse.setAccessToken(AuthResponse.TOKEN_TYPE + token);
@@ -121,6 +124,20 @@ public class AuthController {
         authResponse.setRoles(roles);
 
         return ResponseEntity.ok(authResponse);
+    }
+
+    @PutMapping("/activestatus")
+    public ResponseEntity<?> changeActiveStatus(@RequestBody User userinfo){
+        Optional<User> user = userRepository.findByEmail(userinfo.getEmail());
+        User user1 = user.get();
+        if(user1.getActive() == null)
+            user1.setActive(Boolean.FALSE);
+        else {
+            user1.setActive(!user1.getActive());
+        }
+        userRepository.save(user1);
+
+        return ResponseEntity.ok(userinfo);
     }
 
 }
